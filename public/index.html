@@ -22,6 +22,28 @@
     <footer>
         <p>By German Estefan</p>
     </footer>
+    <script>
+        const form = document.querySelector('#formSend');
+        const urlValue = document.querySelector('#url_input');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resp = await fetch('http://localhost:3000/api/shorturl', {
+                method: 'POST',
+                body: JSON.stringify({ url: urlValue.value }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            const respToJSON = await resp.json();
+
+            if(respToJSON.error){
+                return alert(respToJSON.error)
+            }
+
+            alert(`Original URL: ${respToJSON.original_url}\nURL Shorted: ${respToJSON.short_url}\nGo to http://${window.location.hostname}/api/shorturl/${respToJSON.short_url} to see the page`);
+        })
+    </script>
 </body>
 
 </html>
